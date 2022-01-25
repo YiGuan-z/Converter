@@ -7,7 +7,7 @@ class BinarTest {
 
     @Test
     void getBinary() {
-        System.out.printf("+127D的二进制结果是:%s\n",Binar.getBinary("127"));
+        System.out.printf("+127D的二进制结果是:%s\n", Binar.getBinary("127"));
         assert Binar.getBinary("127").equals("01111111");
     }
 
@@ -32,10 +32,23 @@ class BinarTest {
     @Test
     void mulBinary() {
         System.out.printf("101B*11B=5D*3D的结果是:%s\n", Binar.mulBinary("101", "11"));
-        assert Binar.mulBinary("101", "11").equals("1111");
+        assert Binar.mulBinary("101", "11").equals("01111");
     }
 
-//    @Test
+    @Test
     void divBinary() {
+        System.out.printf("101B/11B=5D/3D的结果是:%s\n", Binar.divBinary("101", "11"));
+        assert Binar.divBinary("101", "11").equals("01");
+    }
+
+    @Test
+    void binToOctal() {
+        System.out.printf("101B的八进制结果是:%s\n", Binar.binToOctal("1011"));
+        assert Binar.binToOctal("101").equals("5");
+    }
+    @Test
+    void modBinary(){
+        System.out.printf("101B的求余结果是:%s\n",Binar.modBinary("101","11"));
+        assert Binar.modBinary("101","11").equals("010");
     }
 }

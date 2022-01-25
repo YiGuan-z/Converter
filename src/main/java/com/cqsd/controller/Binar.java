@@ -88,12 +88,21 @@ public class Binar {
     }
 
     /**
+     * 二进制转八进制
+     * @param number 二进制数
+     * @return 八进制数
+     */
+    public static String binToOctal(String number) {
+        return binarApi.binToOctal(number);
+    }
+
+    /**
      * 二进制转十六进制
      * @param number 二进制数
      * @return 十六进制数
      */
-    public static String binaryToHex(String number) {
-        return binarApi.binaryToHex(number);
+    public static String binToHex(String number) {
+        return binarApi.binToHex(number);
     }
 
     /**

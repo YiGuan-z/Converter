@@ -63,13 +63,13 @@ public class BinarApiImpl implements BinarApi {
     @Override
     public String addBinary(String a, String b) {
         //将两个二进制字符对齐
-        String bin1 = a;
-        String bin2 = b;
-        while (bin1.length() < bin2.length()) bin1 = "0" + bin1;
-        while (bin2.length() < bin1.length()) bin2 = "0" + bin2;
+        StringBuilder bin1 = new StringBuilder(a);
+        StringBuilder bin2 = new StringBuilder(b);
+        while (bin1.length() < bin2.length()) bin1.insert(0, "0");
+        while (bin2.length() < bin1.length()) bin2.insert(0, "0");
         //计算两个二进制字符的和
         int carry = 0;
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = bin1.length() - 1; i >= 0; i--) {
             int sum = bin1.charAt(i) - '0' + bin2.charAt(i) - '0';
             //计算进位
@@ -81,11 +81,11 @@ public class BinarApiImpl implements BinarApi {
             if (sum >= 2) {
                 carry = 1;
             }
-            result = sum % 2 + result;
+            result.insert(0, sum % 2);
         }
         //将结果转换为字符串
-        if (carry > 0) result = carry + result;
-        return result;
+        if (carry > 0) result.insert(0, carry);
+        return result.toString();
     }
 
     /**
@@ -99,14 +99,14 @@ public class BinarApiImpl implements BinarApi {
     @Override
     public String subBinary(String a, String b) {
         //将两个二进制字符对齐
-        String bin1 = a;
-        String bin2 = b;
-        while (bin1.length() < bin2.length()) bin1 = "0" + bin1;
-        while (bin2.length() < bin1.length()) bin2 = "0" + bin2;
+        StringBuilder bin1 = new StringBuilder(a);
+        StringBuilder bin2 = new StringBuilder(b);
+        while (bin1.length() < bin2.length()) bin1.insert(0, "0");
+        while (bin2.length() < bin1.length()) bin2.insert(0, "0");
         //将第二个二进制反转再加一
-        String res = addBinary(reverse(bin2), "1");
+        String res = addBinary(reverse(bin2.toString()), "1");
         //计算两个二进制相加的和
-        StringBuilder result = new StringBuilder(addBinary(bin1, res));
+        StringBuilder result = new StringBuilder(addBinary(bin1.toString(), res));
         result.delete(0, 1);
         return result.toString();
     }
@@ -229,7 +229,42 @@ public class BinarApiImpl implements BinarApi {
      */
     @Override
     public String binToOctal(String number) {
-        return null;
+        //421原则3为相加不足补0
+        StringBuilder bin=new StringBuilder(number);
+        while (bin.length()%3!=0) bin.insert(0,"0");
+        //结果集
+        String result;
+        //文字暂存池
+        StringBuilder res= new StringBuilder();
+        //计算池
+        int temp=0;
+        //内部判断变量
+        int v=0;
+        for (int i=bin.length()-1;i>=0;i--){
+            //步增
+            v++;
+            //判断三个数字
+            if (v==1){
+                if (bin.charAt(i)!='0'){
+                    temp+=1;
+                }
+            }else if (v==2){
+                if (bin.charAt(i)!='0'){
+                    temp+=2;
+                }
+            }else if (v==3){
+                if (bin.charAt(i)!='0'){
+                     temp+=4;
+                }
+                //在第三部将结果加入res变量
+                res.insert(0, temp);
+                //将存储池和控制变量归零
+                temp=0;
+                v=0;
+            }
+        }
+        result= res.toString();
+        return result;
     }
 
     public static synchronized BinarApi getInstance() {
@@ -240,10 +275,10 @@ public class BinarApiImpl implements BinarApi {
     }
     //对齐二进制字符串
     public String align(String a, String b) {
-        String bin1 = a;
-        String bin2 = b;
-        while (bin1.length() < bin2.length()) bin1 = "0" + bin1;
-        while (bin2.length() < bin1.length()) bin2 = "0" + bin2;
+        StringBuilder bin1 = new StringBuilder(a);
+        StringBuilder bin2 = new StringBuilder(b);
+        while (bin1.length() < bin2.length()) bin1.insert(0, "0");
+        while (bin2.length() < bin1.length()) bin2.insert(0, "0");
         return bin1 + " " + bin2;
     }
 
