@@ -1,6 +1,9 @@
 package com.cqsd.api;
 
-public interface BinarApi {
+import java.io.Serializable;
+
+public interface BinarApi extends Serializable {
+    long serialVersionUID = 1L;
     /**
      * 十进制转二进制
      * 获取一个正数的二进制表示
@@ -83,18 +86,17 @@ public interface BinarApi {
      * @return 十六进制数
      */
     String decToHex(String number);
-
-    /**
-     * 十六进制转二进制
-     * @param number 十六进制数
-     * @return 二进制数
-     */
-    String hexToBinary(String number);
-
     /**
      * 十六进制转十进制
      * @param number 十六进制数
      * @return 十进制数
      */
     String hexToDecimal(String number);
+
+    /**
+     * 查询10-15对应的字符
+     * @param number 十进制数
+     * @return 对应的十六进制数
+     */
+     String getHexNumber(int number);
 }

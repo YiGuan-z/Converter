@@ -2,11 +2,35 @@ package com.cqsd.api.lmpl;
 
 import com.cqsd.api.BinarApi;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class BinarApiImpl implements BinarApi {
+    /**
+     * 单例模式
+     */
+    private static BinarApi binarApi;
+    /**
+     * 十六进制字典
+     */
+    private final static Map<Integer, String> HexMap;
+
+    //Don't let anyone instantiate this class.
     private BinarApiImpl() {
     }
 
-    private static BinarApi binarApi;
+    static {
+        HexMap = new HashMap<>();
+        for (int i = 0; i <= 9; i++) {
+            HexMap.put(i, String.valueOf(i));
+        }
+        HexMap.put(10, "A");
+        HexMap.put(11, "B");
+        HexMap.put(12, "C");
+        HexMap.put(13, "D");
+        HexMap.put(14, "E");
+        HexMap.put(15, "F");
+    }
 
     /**
      * 获取一个正数的二进制表示，通过模运算对当前数用2取模
@@ -158,6 +182,7 @@ public class BinarApiImpl implements BinarApi {
         result = getBinary(result);
         return result;
     }
+
     //将二进制转换为十进制
     public String toDecimal(String number) {
         StringBuilder cal = new StringBuilder(number);
@@ -183,9 +208,43 @@ public class BinarApiImpl implements BinarApi {
      */
     @Override
     public String binToHex(String number) {
-
-
-        return null;
+        //8421原则，和二转八类似
+        //需要处理10-16的映射关系
+        StringBuilder num = new StringBuilder(number);
+        StringBuilder result = new StringBuilder();
+        while (num.length() % 4 != 0) num.insert(0, "0");
+        int t = 0;
+        int sum = 0;
+        char temp;
+        for (int i = num.length() - 1; i >= 0; i--) {
+            temp = num.charAt(i);
+            t++;
+            if (t == 1) {
+                if (temp != '0') {
+                    sum = sum + 1;
+                }
+            } else if (t == 2) {
+                if (temp != '0') {
+                    sum = sum + 2;
+                }
+            } else if (t == 3) {
+                if (temp != '0') {
+                    sum = sum + 4;
+                }
+            } else {
+                if (temp != '0') {
+                    sum = sum + 8;
+                }
+                if (sum > 9) {
+                    result.insert(0, getHexNumber(sum));
+                } else {
+                    result.insert(0, sum);
+                }
+                sum = 0;
+                t = 0;
+            }
+        }
+        return result.toString();
     }
 
     /**
@@ -196,20 +255,21 @@ public class BinarApiImpl implements BinarApi {
      */
     @Override
     public String decToHex(String number) {
-        return null;
+        //十进制转换十六进制
+        //类似与十进制转换二进制
+        StringBuilder result = new StringBuilder();
+        int num = Integer.parseInt(number);
+        if (num == 0) return "0";
+        do {
+            int temp = num % 16;
+            if (temp > 9) {
+                result.insert(0, getHexNumber(temp));
+            } else {
+                result.insert(0, temp);
+            }
+        } while ((num /= 16) > 0);
+        return result.toString();
     }
-
-    /**
-     * 十六进制转二进制
-     *
-     * @param number 十六进制数
-     * @return 二进制数
-     */
-    @Override
-    public String hexToBinary(String number) {
-        return null;
-    }
-
     /**
      * 十六进制转十进制
      *
@@ -218,7 +278,19 @@ public class BinarApiImpl implements BinarApi {
      */
     @Override
     public String hexToDecimal(String number) {
-        return null;
+        StringBuilder num = new StringBuilder(number);
+        String result;
+        int sum = 0;
+        int t = 0;
+        for (int i = num.length() - 1; i >= 0; i--) {
+            t++;
+            if (num.charAt(i) != '0') {
+                int temp = getDecNumber(String.valueOf(num.charAt(i)));
+                sum = (int) (sum + temp * Math.pow(16, t - 1));
+            }
+        }
+        result = String.valueOf(sum);
+        return result;
     }
 
     /**
@@ -230,40 +302,40 @@ public class BinarApiImpl implements BinarApi {
     @Override
     public String binToOctal(String number) {
         //421原则3为相加不足补0
-        StringBuilder bin=new StringBuilder(number);
-        while (bin.length()%3!=0) bin.insert(0,"0");
+        StringBuilder bin = new StringBuilder(number);
+        while (bin.length() % 3 != 0) bin.insert(0, "0");
         //结果集
         String result;
         //文字暂存池
-        StringBuilder res= new StringBuilder();
+        StringBuilder res = new StringBuilder();
         //计算池
-        int temp=0;
+        int temp = 0;
         //内部判断变量
-        int v=0;
-        for (int i=bin.length()-1;i>=0;i--){
+        int v = 0;
+        for (int i = bin.length() - 1; i >= 0; i--) {
             //步增
             v++;
             //判断三个数字
-            if (v==1){
-                if (bin.charAt(i)!='0'){
-                    temp+=1;
+            if (v == 1) {
+                if (bin.charAt(i) != '0') {
+                    temp += 1;
                 }
-            }else if (v==2){
-                if (bin.charAt(i)!='0'){
-                    temp+=2;
+            } else if (v == 2) {
+                if (bin.charAt(i) != '0') {
+                    temp += 2;
                 }
-            }else if (v==3){
-                if (bin.charAt(i)!='0'){
-                     temp+=4;
+            } else {
+                if (bin.charAt(i) != '0') {
+                    temp += 4;
                 }
                 //在第三部将结果加入res变量
                 res.insert(0, temp);
                 //将存储池和控制变量归零
-                temp=0;
-                v=0;
+                temp = 0;
+                v = 0;
             }
         }
-        result= res.toString();
+        result = res.toString();
         return result;
     }
 
@@ -273,6 +345,7 @@ public class BinarApiImpl implements BinarApi {
         }
         return binarApi;
     }
+
     //对齐二进制字符串
     public String align(String a, String b) {
         StringBuilder bin1 = new StringBuilder(a);
@@ -283,6 +356,7 @@ public class BinarApiImpl implements BinarApi {
     }
 
     //反转二进制字符串
+    //这个方法有毒，耗时极长
     public String reverse(String a) {
         StringBuilder result = new StringBuilder(a);
         for (int i = 0; i < a.length(); i++) {
@@ -293,6 +367,27 @@ public class BinarApiImpl implements BinarApi {
             }
         }
         return result.toString();
+    }
+
+    @Override
+    public String getHexNumber(int number) {
+        return HexMap.get(number);
+    }
+
+    /**
+     * 通过value来获取key
+     *
+     * @param number 十六进制数
+     * @return 十进制数
+     */
+    public int getDecNumber(String number) {
+        final int[] result = new int[1];
+        HexMap.keySet().forEach(key -> {
+            if (HexMap.get(key).equals(number)) {
+                result[0] = key;
+            }
+        });
+        return result[0];
     }
 
 }
