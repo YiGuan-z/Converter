@@ -9,7 +9,7 @@ public class Binar {
     }
 
     private static final BinarApi binarApi = BinarApiImpl.getInstance();
-
+//    private static final BinarApi binarApi=BinarApi.binar;
     /**
      * 十进制转二进制
      * 获取一个正数的二进制表示
@@ -146,4 +146,13 @@ public class Binar {
         return binarApi.getHexNumber(number);
     }
 
+    /**
+     * 十进制转二进制
+     * 获取一个正数的二进制表示
+     * @param number 十进制数
+     * @return 二进制数
+     */
+    public static String getBinaryPositive(String number) {
+        return binarApi.getBinaryPositive(number);
+    }
 }

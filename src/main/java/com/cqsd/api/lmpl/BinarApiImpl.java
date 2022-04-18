@@ -5,11 +5,12 @@ import com.cqsd.api.BinarApi;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BinarApiImpl implements BinarApi {
+public class BinarApiImpl
+        implements BinarApi {
     /**
      * 单例模式
      */
-    private static BinarApi binarApi;
+    private static volatile BinarApi binarApi;
     /**
      * 十六进制字典
      */
@@ -18,12 +19,10 @@ public class BinarApiImpl implements BinarApi {
     //Don't let anyone instantiate this class.
     private BinarApiImpl() {
     }
-
     static {
         HexMap = new HashMap<>();
-        for (int i = 0; i <= 9; i++) {
+        for (int i = 0; i <= 9; i++)
             HexMap.put(i, String.valueOf(i));
-        }
         HexMap.put(10, "A");
         HexMap.put(11, "B");
         HexMap.put(12, "C");
@@ -40,9 +39,11 @@ public class BinarApiImpl implements BinarApi {
      * @return 返回一个二进制表示的字符串
      */
     @Override
-    public String getBinary(String number) {
+    public String getBinaryPositive(String number) {
         int currentNum = Integer.parseInt(number);
         StringBuilder binary = new StringBuilder();
+        if (currentNum == 0)
+            return "0";
         //二进制计算
         do {
             binary.insert(0, (currentNum % 2));
@@ -97,14 +98,13 @@ public class BinarApiImpl implements BinarApi {
         for (int i = bin1.length() - 1; i >= 0; i--) {
             int sum = bin1.charAt(i) - '0' + bin2.charAt(i) - '0';
             //计算进位
-            if (carry == 1) {
+            if (carry == 1)
                 sum += carry;
                 carry = 0;
-            }
+
             //产生进位
-            if (sum >= 2) {
-                carry = 1;
-            }
+            if (sum >= 2) carry = 1;
+
             result.insert(0, sum % 2);
         }
         //将结果转换为字符串
@@ -192,9 +192,8 @@ public class BinarApiImpl implements BinarApi {
         int v = 0;
         for (int i = cal.length() - 1; i >= 0; i--) {
             v++;
-            if (cal.charAt(i) == '1') {
+            if (cal.charAt(i) == '1')
                 res += (int) Math.pow(2, v - 1);
-            }
         }
         result = String.valueOf(res);
         return result;
@@ -341,13 +340,17 @@ public class BinarApiImpl implements BinarApi {
 
     public static synchronized BinarApi getInstance() {
         if (binarApi == null) {
-            binarApi = new BinarApiImpl();
+            synchronized (BinarApi.class) {
+                if (binarApi == null) {
+                    binarApi = new BinarApiImpl();
+                }
+            }
         }
         return binarApi;
     }
 
     //对齐二进制字符串
-    public String align(String a, String b) {
+    String align(String a, String b) {
         StringBuilder bin1 = new StringBuilder(a);
         StringBuilder bin2 = new StringBuilder(b);
         while (bin1.length() < bin2.length()) bin1.insert(0, "0");
@@ -357,7 +360,7 @@ public class BinarApiImpl implements BinarApi {
 
     //反转二进制字符串
     //这个方法有毒，耗时极长
-    public String reverse(String a) {
+    String reverse(String a) {
         StringBuilder result = new StringBuilder(a);
         for (int i = 0; i < a.length(); i++) {
             if (result.charAt(i) == '0') {
@@ -380,7 +383,7 @@ public class BinarApiImpl implements BinarApi {
      * @param number 十六进制数
      * @return 十进制数
      */
-    public int getDecNumber(String number) {
+    int getDecNumber(String number) {
         final int[] result = new int[1];
         HexMap.keySet().forEach(key -> {
             if (HexMap.get(key).equals(number)) {

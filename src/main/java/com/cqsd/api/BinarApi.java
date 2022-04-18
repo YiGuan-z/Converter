@@ -1,16 +1,26 @@
 package com.cqsd.api;
 
+import com.cqsd.api.lmpl.BinarApiImpl;
+
 import java.io.Serializable;
 
 public interface BinarApi extends Serializable {
+    BinarApi binar=BinarApiImpl.getInstance();
     long serialVersionUID = 1L;
+    // 十进制转二进制
+    default String getBinary(String number) {
+        if (number.startsWith("-")) {
+            return getBinaryNegative(number.substring(1));
+        }
+        return getBinaryPositive(number);
+    }
     /**
      * 十进制转二进制
      * 获取一个正数的二进制表示
      * @param number 十进制数
      * @return 二进制数
      */
-    String getBinary(String number);
+    String getBinaryPositive(String number);
 
     /**
      * 获取一个负数的二进制表示
@@ -99,4 +109,8 @@ public interface BinarApi extends Serializable {
      * @return 对应的十六进制数
      */
      String getHexNumber(int number);
+
+     default BinarApi getBinar() {
+         return binar;
+     }
 }

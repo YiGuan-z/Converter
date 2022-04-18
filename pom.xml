@@ -7,6 +7,7 @@
     <groupId>com.cqsd</groupId>
     <artifactId>bshell</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -15,7 +16,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

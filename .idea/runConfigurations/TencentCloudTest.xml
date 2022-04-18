@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="TencentCloudTest" type="JUnit" factoryName="JUnit">
+    <module name="Bshell" />
+    <projectPathOnTarget name="projectPathOnTarget" value="/root/Bshell" />
+    <option name="PACKAGE_NAME" value="com.cqsd.controller" />
+    <option name="MAIN_CLASS_NAME" value="com.cqsd.controller.BinarTest" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="class" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
