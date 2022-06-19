@@ -1,4 +1,4 @@
-package com.cqsd.annotation;
+package com.cqsd.utils.juit.annotation;
 
 
 import java.lang.annotation.ElementType;

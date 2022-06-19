@@ -1,8 +1,8 @@
-package com.cqsd.api;
+package com.cqsd.utils.juit;
 
-import com.cqsd.annotation.MyAfter;
-import com.cqsd.annotation.MyBefore;
-import com.cqsd.annotation.MyTest;
+import com.cqsd.utils.juit.annotation.MyAfter;
+import com.cqsd.utils.juit.annotation.MyBefore;
+import com.cqsd.utils.juit.annotation.MyTest;
 
 public class EmployeeDaoTest {
     @MyBefore
@@ -11,7 +11,7 @@ public class EmployeeDaoTest {
     }
     @MyAfter
     void destroy(){
-        System.out.println("销毁\n");
+        System.out.println("销毁");
     }
     @MyTest
     void testSave(){
