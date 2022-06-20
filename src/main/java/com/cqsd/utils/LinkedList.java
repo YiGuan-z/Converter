@@ -185,7 +185,7 @@ public class LinkedList<K, V> extends AbstractMap<K, V> implements Map<K, V> {
             keySet.add(key);
             values.add(value);
             table.next = e;
-            e.prev=table;
+            e.prev = table;
             size++;
             return null;
         } else {
@@ -219,6 +219,10 @@ public class LinkedList<K, V> extends AbstractMap<K, V> implements Map<K, V> {
 
 
     public void putAll(Map<? extends K, ? extends V> m) {
+        this.table=null;
+        this.table = new Node<>(0, null, null, null);
+        for (Map.Entry<? extends K, ? extends V> e : m.entrySet())
+            putVal(hash(e.getKey()), e.getKey(), e.getValue());
 
     }
 

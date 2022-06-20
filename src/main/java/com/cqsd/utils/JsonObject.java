@@ -1,5 +1,6 @@
 package com.cqsd.utils;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.BiConsumer;
 
@@ -69,15 +70,22 @@ public class JsonObject extends AbstractMap<String, Object> implements Map<Strin
         return map.hashCode();
     }
 
+    /**
+     * 返回json字符串支持包装类数组，不支对象持嵌套。
+     *
+     * @return json
+     */
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         sb.append("{");
         for (Map.Entry<String, Object> entry : map.entrySet()) {
+            sb.append("\"");
             sb.append(entry.getKey());
+            sb.append("\"");
             sb.append(":");
             if (isArray(entry.getValue())) {
                 sb.append("[");
-                int i=0;
+                int i = 0;
                 for (Object o : (Object[]) entry.getValue()) {
                     i++;
                     sb.append("\"");
@@ -85,8 +93,8 @@ public class JsonObject extends AbstractMap<String, Object> implements Map<Strin
                     sb.append("\"");
                     sb.append(",");
 
-                    if(i==((Object[]) entry.getValue()).length){
-                        sb.deleteCharAt(sb.length()-1);
+                    if (i == ((Object[]) entry.getValue()).length) {
+                        sb.deleteCharAt(sb.length() - 1);
                     }
                 }
                 sb.append("]");
@@ -103,7 +111,22 @@ public class JsonObject extends AbstractMap<String, Object> implements Map<Strin
         return sb.toString();
     }
 
-    private boolean isArray(Object value) {
+    boolean isArray(Object value) {
         return value.getClass().isArray();
+    }
+
+    //获取属性个数
+    int argsCount(Object value) {
+        Field[] fields = value.getClass().getDeclaredFields();
+        return fields.length;
+    }
+
+    //通过注解里的字段获取属性
+    String getFieldName(Field field) {
+        if (field.isAnnotationPresent(JsonEntry.class)) {
+            JsonEntry jsonField = field.getAnnotation(JsonEntry.class);
+            return jsonField.value();
+        }
+        return field.getName();
     }
 }
