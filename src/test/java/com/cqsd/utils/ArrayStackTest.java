@@ -2,8 +2,6 @@ package com.cqsd.utils;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ArrayStackTest {
     class Student{
         int age;
@@ -54,7 +52,8 @@ class ArrayStackTest {
         stack.push(new Student(4,"赵六"));
 //        stack.print();
         stack.pop();
-        stack.print();
+//        stack.print();
+        System.out.printf("栈顶元素：%s\n",stack.peek());
     }
 
 }

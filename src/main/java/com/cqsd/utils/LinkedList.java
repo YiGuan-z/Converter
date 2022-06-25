@@ -96,7 +96,7 @@ public class LinkedList<K, V> extends AbstractMap<K, V> implements Map<K, V> {
     /*--------------------Abstract Class------------------------*/
 
     /*--------------------Static utilities--------------------*/
-    static final int hash(Object key) {
+    final static int hash(Object key) {
         int h;
         return (key == null) ? 0 : (h = key.hashCode()) | (h ^ (h >>> 16));
     }
@@ -219,7 +219,7 @@ public class LinkedList<K, V> extends AbstractMap<K, V> implements Map<K, V> {
 
 
     public void putAll(Map<? extends K, ? extends V> m) {
-        this.table=null;
+        this.table = null;
         this.table = new Node<>(0, null, null, null);
         for (Map.Entry<? extends K, ? extends V> e : m.entrySet())
             putVal(hash(e.getKey()), e.getKey(), e.getValue());

@@ -1,12 +1,16 @@
 package com.cqsd.utils;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
-public class JsonObject extends AbstractMap<String, Object> implements Map<String, Object> {
+public class JsonObject
+        extends AbstractMap<String, Object>
+        implements Map<String, Object> {
     private final Map<String, Object> map;
-
     public JsonObject(Map<String, Object> map) {
         this.map = map;
     }
@@ -115,18 +119,19 @@ public class JsonObject extends AbstractMap<String, Object> implements Map<Strin
         return value.getClass().isArray();
     }
 
-    //获取属性个数
+    //获取被注解的类
     int argsCount(Object value) {
         Field[] fields = value.getClass().getDeclaredFields();
         return fields.length;
     }
 
     //通过注解里的字段获取属性
-    String getFieldName(Field field) {
-        if (field.isAnnotationPresent(JsonEntry.class)) {
-            JsonEntry jsonField = field.getAnnotation(JsonEntry.class);
-            return jsonField.value();
+    String getFieldName(String fileName,Object obj) {
+        try {
+            Field field = obj.getClass().getField(fileName);
+            return (String) field.get(obj);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            throw new RuntimeException(e);
         }
-        return field.getName();
     }
 }

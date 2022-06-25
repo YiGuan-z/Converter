@@ -1,70 +1,100 @@
 package com.cqsd.utils;
 
 public class ArrayStack<V> {
-//    int [] stact;
     /*------------------------Fields------------------------*/
-    V [] stact;
+    int size;
     int maxSize;
-    int top=-1;
+    Node<V> top;
 
     /*------------------------Constructor------------------------*/
     public ArrayStack(int maxSize) {
         this.maxSize = maxSize;
-        if (maxSize>0){
-            stact= (V[]) new Object[maxSize];
-        }
     }
+
     /* ---------------- Public operations -------------- */
-    public boolean isFull(){
-        return maxSize -1==top;
+    public boolean isFull() {
+        return size == maxSize;
     }
 
-    public boolean isEmpty(){
-        return top==-1;
+    public boolean isEmpty() {
+        return size == 0;
     }
 
-    public void push(V value){
-        if(isFull()){
+    public void push(V value) {
+        if (isFull()) {
             System.out.println("stack is full");
             return;
         }
-        stact[++top]=value;
+//        stact[++top]=value;
+        Node<V> temp = top;
+        top = new Node<>(value);
+        top.next = temp;
+        size++;
     }
 
-    public V pop(){
-        if(isEmpty()){
+    public V pop() {
+        if (isEmpty()) {
             throw new RuntimeException("栈中无数据");
         }
-        return stact[top--];
+        Node<V> temp = top;
+        top = temp.next;
+        size--;
+        return temp.value;
     }
 
-    public void print(){
-        if (isEmpty()){
+    public V peek() {
+        if (isEmpty()) {
+            throw new RuntimeException("栈中无数据");
+        }
+        return top.value;
+    }
+
+    public void print() {
+        if (isEmpty()) {
             System.out.println("stack is empty");
             return;
         }
-        for (int i =top; i >=0 ; i--) {
-            System.out.printf("index:%d value:%s\n",i,stact[i]);
+        Node<V> cur = top;
+        while (cur != null) {
+            System.out.println(cur.value);
+            cur = cur.next;
         }
     }
 
+    public void reverse() {
+        if (isEmpty()) {
+            System.out.println("stack is empty");
+            return;
+        }
+        Node<V> cur = top.next;
+        Node<V> pre;
+        Node<V> reverseHead = new Node<>(top.value);
+        while (cur != null) {
+            pre = cur.next;
+            cur.next = reverseHead.next;
+            reverseHead.next = cur;
+            cur = pre;
+        }
+        top.next = reverseHead.next;
+    }
+
     /*--------------------Static Class--------------------*/
-//    class Node<V>{
-//        V value;
-//        Node<V> next;
+    static class Node<V> {
+        V value;
+        Node<V> next;
 //        Node<V> previous;
-//
-//        public Node(V value) {
-//            this.value = value;
-//        }
-//
-//        public String toString() {
-//            return "Node{" +
-//                    "value=" + value +
-//                    ", next=" + next +
-//                    ", previous=" + previous +
-//                    '}';
-//        }
-//    }
+
+        public Node(V value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "value=" + value +
+                    ", next=" + next +
+                    '}';
+        }
+    }
 
 }
