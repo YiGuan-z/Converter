@@ -5,7 +5,8 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.BiConsumer;
 
-public class LinkedList<K, V> extends AbstractMap<K, V> implements Map<K, V> {
+public class LinkedList<K, V>
+        extends AbstractMap<K, V> implements Map<K, V> {
 
     /*--------------------Static Class--------------------*/
     static class Node<K, V>

@@ -5,7 +5,8 @@
       <target name="root@49.232.150.194" type="ssh/sftp" uuid="447d2cb3-5145-4a56-a7e5-30986c92f5a8">
         <config>
           <option name="projectRootOnTarget" value="/root/Bshell" />
-          <option name="serverName" value="root@49.232.150.194" />
+          <option name="serverName" value="root@49.232.150.194:22 key" />
+          <option name="useRsync" value="true" />
         </config>
         <ContributedStateBase type="JavaLanguageRuntime">
           <config>

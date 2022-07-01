@@ -1,12 +1,7 @@
 package com.cqsd.utils;
 
-import netscape.javascript.JSObject;
+public abstract class JSRunTime {
+  public abstract Object run(String script,String func,Object... args);
 
-public class JSRunTime {
-   void run(){
-       JSObject object;
-       //language=JavaScript
-       StringBuilder jsFunc;
 
-   }
 }

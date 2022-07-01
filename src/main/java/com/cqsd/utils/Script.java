@@ -6,14 +6,14 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 public class Script {
-    ScriptEngine engine;
+    protected ScriptEngine engine;
 
     public Script() {
         ScriptEngineManager manager = new ScriptEngineManager();
         this.engine = manager.getEngineByName("JavaScript");
     }
 
-    Object run(String script,String function,Object... args) {
+    public Object run(String script, String function, Object... args) {
         try {
             engine.eval(script);
             Invocable inv2 = (Invocable) engine;
