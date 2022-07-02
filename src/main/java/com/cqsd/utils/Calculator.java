@@ -2,14 +2,18 @@ package com.cqsd.utils;
 
 import static com.cqsd.utils.Operator.*;
 
-public class Calcuator {
+public class Calculator {
 
     //数字栈
-    private final ArrayStack<Integer> numStack = new ArrayStack<>(10);
+    private final ArrayStack<Double> numStack = new ArrayStack<>(10);
     //符号栈
     private final ArrayStack<Operator> opStack = new ArrayStack<>(10);
 
     //扫描器
+
+    /**
+     * 这里使用波兰表达式进行计算，之后还会再写一个转换为逆波兰表达式的方法
+     */
     void scan(String expression) {
         int index = 0;
         while (index < expression.length()) {
@@ -19,7 +23,7 @@ public class Calcuator {
                 //是否为数字 数字匹配为true
                 if (Character.isDigit(c)) {
                     //从char中获取数字
-                    Integer num = Character.getNumericValue(c);
+                    Double num =(double) Character.getNumericValue(c);
                     //数字直接入栈
                     numStack.push(num);
                 } else {
@@ -41,10 +45,13 @@ public class Calcuator {
                     //这里计算有问题，拿到了乘除没拿到下一个数字，例如"3+4*5-6的时候3 + 4 入栈 一扫描到*就立即对3和2计算
                     //不过好像可以对逆波兰表达式进行计算
                     //逆波兰表达式也不行，例如3 4 + 5 * 6 -的时候4和5遇上乘法也是直接对4 5 进行求值
-                    Integer p1 = numStack.pop();
-                    Integer p2 = numStack.pop();
-                    Operator pop = opStack.pop();
-                    int cal = cal(p1, p2, pop);
+                    //Double
+                    var p1 = numStack.pop();
+                    var p2 = numStack.pop();
+                    //Operator
+                    var pop = opStack.pop();
+                    //Double
+                    var cal = cal(p1, p2, pop);
                     numStack.push(cal);
                     //} else {
                     //计算3 5 * 2 4 * + 6 -的时候加号多入一次
@@ -85,10 +92,16 @@ public class Calcuator {
      * @param oper 操作符
      * @return 表达式计算结果
      */
-    int cal(int num1, int num2, Operator oper) {
+    Double cal(Double num1, Double num2, Operator oper) {
+        Double temp;
+        if (num1 < num2) {
+            temp = num1;
+            num1 = num2;
+            num2 = temp;
+        }
         switch (oper) {
             case MUL:
-                return num1 * num2;
+                return num1* num2;
             case DIV:
                 return num1 / num2;
             case ADD:
@@ -96,7 +109,7 @@ public class Calcuator {
             case SUB:
                 return num1 - num2;
             default:
-                return 0;
+                return 0.0;
         }
     }
 
@@ -127,12 +140,13 @@ public class Calcuator {
      * @param expression 表达式
      * @return 计算结果
      */
-    public int run(String expression) {
+    public Double run(String expression) {
         scan(expression);
         while (numStack.size > 1) {
             Operator oper = opStack.pop();
-            int num1 = numStack.pop();
-            int num2 = numStack.pop();
+            //Double
+            var num1 = numStack.pop();
+            var num2 = numStack.pop();
             //这里是乘除 怎么先算乘除啊！！！
             numStack.push(cal(num1, num2, oper));
         }

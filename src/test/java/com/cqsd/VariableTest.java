@@ -5,10 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
 public class VariableTest {
-    class Strings {
-
-    }
-
     @Test
     void test() {
         byte c = 9;
