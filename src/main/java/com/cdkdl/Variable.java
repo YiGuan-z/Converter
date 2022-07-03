@@ -1,17 +1,32 @@
 package com.cdkdl;
 
+import java.util.Scanner;
+import static java.lang.System.*;
 public class Variable {
     public static void main(String[] args) {
-        int c=0/10;
-        System.out.printf("c=%s",c);
-        //给定47天，计算共有多少月和多少天
-        int days=47;
-        int month,day;
-        month=days/30;
-        day=days%30;
-        System.out.printf("%d天里面有%d月%d天",days,month,day);
-
+        /**
+         * [0,5)无等级
+         * [5,12)*
+         * [12,21)**
+         * [21,32)***
+         * [32,~) 🌛
+         */
+        var sc = new Scanner(in);
+        System.out.println("请输入等级：");
+        int level = sc.nextInt();
+        if (level>=0&&level<5){
+            out.println("???");
+        } else if (level >= 5 && level < 12) {
+            out.println("🌟");
+        } else if (level >= 12 && level < 21) {
+            out.println("🌟🌟");
+        } else if (level >= 21 && level < 32) {
+            out.println("🌟🌟🌟");
+        }else {
+            out.println("🌛");
+        }
     }
+
 
 //    static void swap(int num1, int num2) {
 //        int temp=num1;
