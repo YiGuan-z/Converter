@@ -2,7 +2,7 @@ package com.cdkdl;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Scanner;
+import java.util.function.Consumer;
 
 public class LoginOperationTest {
     @Test
@@ -189,16 +189,18 @@ public class LoginOperationTest {
     @Test
     void ifMaxNumber() {
         int testNumber[] = new int[]{
-                90, 78, 4, 5, 345
+                90, 78, 4, 5, 345, 45, 1, 2345
         };
         int index = 0;
         int max = 0;
         int min = Integer.MAX_VALUE;
         print();
         while (index < testNumber.length) {
+            //如果当前数大于max里面的数字，就把max更新到当前数值
             if (testNumber[index] > max) {
                 max = testNumber[index];
             }
+            //如果当前数小于Int最大值，就把min赋值到min
             if (testNumber[index] < min) {
                 min = testNumber[index];
             }
@@ -269,13 +271,100 @@ public class LoginOperationTest {
     @Test
     void drap() {
         var sb = new StringBuilder();
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 9; col++) {
-                sb.append("*");
-            }
-            sb.append("\n");
+        for (int i = 0; i < 4; i++) {
+            sb.append("*");
             System.out.println(sb);
         }
+    }
+
+    @Test
+    void drap1() {
+        int data[] = new int[]{
+                0, 0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 1, 0, 0, 0,
+                0, 0, 1, 0, 0, 0, 1, 0, 0,
+                0, 1, 0, 0, 1, 0, 0, 1, 0,
+        };
+        print();
+        for (int i = 0; i < data.length; i++) {
+            if (i == 0) continue;
+            if (i % 9 == 0) {
+                System.out.println();
+            } else {
+                if (data[i] == 0) {
+                    System.out.print(" ");
+                } else if (data[i] == 1) {
+                    System.out.print("*");
+                }
+            }
+        }
+        System.out.println();
+        print();
+    }
+
+    @Test
+    void testYear() {
+        int result = 0;
+        //定义一个需要分析的表达式
+        String expression = "2022/07/04";
+        //定义一年的年份
+        int months[] = new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        //将表达式通过/分割
+        String[] exp = expression.split("/");
+        //获取年月日
+        int year = Integer.parseInt(exp[0]);
+        int month = Integer.parseInt(exp[1]);
+        int day = Integer.parseInt(exp[2]);
+        System.out.printf("year:%d month:%d day:%d\n", year, month, day);
+        //判断闰年
+        if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+            months[1] = 29;
+        }
+        //将数组里的天数相加
+        for (int i = 0; i < month - 1; i++) {
+            result += months[i];
+        }
+        //最后加上天数
+        result += day;
+        System.out.printf("%d", result);
+
+    }
+
+    @Test
+    void testNumber() {
+        int a = 81;
+        int b = 153;
+        System.out.printf("最大公因数是%d\n", getGCD(a, b));
+        System.out.printf("最小公倍数是%d\n", getLCM(a, b));
+    }
+
+    /**
+     * 获取公因数
+     * @param x int
+     * @param y int
+     * @return 公因数
+     */
+    int getGCD(int x, int y) {
+        while (x % y != 0) {
+            int temp = x % y;
+            x = y;
+            y = temp;
+        }
+        return y;
+    }
+
+    /**
+     * 公倍数
+     * @param x int
+     * @param y int
+     * @return 公倍数
+     */
+    int getLCM(int x, int y) {
+        int temp = Math.max(x, y);
+        while (temp % x != 0 || temp % y != 0) {
+            temp++;
+        }
+        return temp;
     }
 
     void print() {
