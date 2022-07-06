@@ -23,7 +23,7 @@ public class JsonTest {
         json.put("age", 18);
         json.put("hobbies", jsonObj);
         json.toJSONString("student", new Student("王武", 23));
-//        json.put("students", students);
+        json.toJSONString("students", students);
 
 
     }
@@ -31,11 +31,5 @@ public class JsonTest {
     @Test
     void JsonTestPrint() {
         System.out.println(json);
-        Student[] students = new Student[]{
-                new Student("张三", 18),
-                new Student("李四", 19),
-                new Student("王武", 20),
-        };
-//        json.toJSONString(new Student("王武", 20));
     }
 }

@@ -17,44 +17,6 @@ public final class JsonObject
         this(new HashMap<>());
     }
 
-    public <T> void toJSONString(String key, T obj) {
-        //这个map的getValue里面是等号
-//        Map<String, Object> objectList = new HashMap<>();
-        StringBuilder sb = new StringBuilder("{");
-        //获取class对象
-        try {
-            Class<?> clazz = obj.getClass();
-            //获取所有属性
-            Field[] fields = clazz.getDeclaredFields();
-            //对属性进行迭代操作，如果匹配到注解就获取注解的值和被注解字段的值
-            int i = 0;
-            for (Field field : fields) {
-                field.setAccessible(true);
-                JsonEntry entry = field.getAnnotation(JsonEntry.class);
-                String propName = entry.value();
-                Object propValue = field.get(obj);
-                //System.out.printf("propName:%-2s\t propsValue:%-2s\t\n", propName, propValue);
-//                objectList.put("\"" + propName + "\"", "\"" + propValue + "\"");
-                sb
-                        .append("\"")
-                        .append(propName)
-                        .append("\"")
-                        .append(":")
-                        .append("\"")
-                        .append(propValue)
-                        .append("\"");
-                if (i != fields.length - 1) {
-                    sb.append(",");
-                }
-                i++;
-            }
-            sb.append("}");
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-        map.put(key, sb);
-    }
-
     public Object get(String key) {
         return map.get(key);
     }
@@ -110,13 +72,81 @@ public final class JsonObject
         return map.hashCode();
     }
 
+    // 还差一个拼接数组类型的方法 这个方法还需要进一步拆分亦或是重载一个
+    public <T> void toJSONString(String key, T obj) {
+        StringBuilder sb = new StringBuilder("{");
+        //获取class对象
+        try {
+            Class<?> clazz = obj.getClass();
+            //获取所有属性
+            Field[] fields = clazz.getDeclaredFields();
+            //对属性进行迭代操作，如果匹配到注解就获取注解的值和被注解字段的值
+//            int i = 0;
+            bulidJSONString(obj, sb, fields);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        map.put(key, sb);
+    }
+
+    /**
+     * 这里是用于构建数组 例如<br/>
+     * [{"user":"name","age":"32"},{"user":"name1","age":"11"}]
+     *
+     * @param key     key
+     * @param objects objects
+     * @param <T>     T
+     */
+    public <T> void toJSONString(String key, T[] objects) {
+        StringBuilder sb = new StringBuilder("[");
+        try {
+            for (T object : objects) {
+                Field[] declaredFields = object.getClass().getDeclaredFields();
+//                int i = 0;
+                sb.append("{");
+                bulidJSONString(object, sb, declaredFields);
+                sb.append(",");
+            }
+            sb.append("]");
+            if (sb.charAt(sb.length() - 2) == ',')
+                sb.deleteCharAt(sb.length() - 2);
+            map.put(key, sb);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    private <T> void bulidJSONString(T obj, StringBuilder sb, Field[] fields) throws IllegalAccessException {
+        int i = 0;
+        for (Field field : fields) {
+            field.setAccessible(true);
+            JsonEntry entry = field.getAnnotation(JsonEntry.class);
+            String propName = entry.value();
+            Object propValue = field.get(obj);
+            //System.out.printf("propName:%-2s\t propsValue:%-2s\t\n", propName, propValue);
+            sb
+                    .append("\"")
+                    .append(propName)
+                    .append("\"")
+                    .append(":")
+                    .append("\"")
+                    .append(propValue)
+                    .append("\"");
+            if (i != fields.length - 1) {
+                sb.append(",");
+            }
+            i++;
+        }
+        sb.append("}");
+    }
+
     /**
      * 返回json字符串支持包装类数组，不支对象持嵌套。
      *
      * @return json
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         //json头
         sb.append("{");
         //循环map里面的内容

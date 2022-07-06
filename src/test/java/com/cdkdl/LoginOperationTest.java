@@ -425,6 +425,19 @@ public class LoginOperationTest {
             System.out.println();
         }
     }
+    @Test
+    void testPrice(){
+        double totalPrice = getTotalPrice(0.7, 54.2, 321.4, 3245.2);
+        System.out.printf("%-2.4f",totalPrice);
+    }
+
+    double getTotalPrice(double cutoff,double... prices){
+        double total=0;
+        for (double price : prices) {
+            total+=price;
+        }
+        return total*cutoff;
+    }
 
     void print() {
         System.out.println("*****************************************");

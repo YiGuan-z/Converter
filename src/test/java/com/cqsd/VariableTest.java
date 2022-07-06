@@ -37,4 +37,33 @@ public class VariableTest {
         System.out.println(Arrays.deepToString(chars));
     }
 
+    @Test
+    void testPrint() {
+        int[] arr = new int[]{
+                23, 12, 3213, 4
+        };
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(arr[i]);
+            if (i != arr.length - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+        System.out.print(sb);
+    }
+
+    @Test
+    void getAverage() {
+        int num[] = new int[]{124, 324, 53, 6457, 58, 9};
+        System.out.printf("平均数是%-2f", average(num));
+    }
+
+    double average(int[] nums) {
+        double count = 0;
+        for (var item : nums) {
+            count += item;
+        }
+        return count / nums.length;
+    }
 }
