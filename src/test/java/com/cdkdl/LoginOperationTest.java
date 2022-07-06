@@ -118,6 +118,7 @@ public class LoginOperationTest {
      */
     @Test
     void testPrint99() {
+//        ClassLoader.
         for (int row = 1; row <= 9; row++) {
             for (int col = 1; col <= row; col++) {
                 System.out.printf("%d*%d=%d ", col, row, row * col);
@@ -189,7 +190,7 @@ public class LoginOperationTest {
     @Test
     void ifMaxNumber() {
         int testNumber[] = new int[]{
-                90, 78, 4, 5, 345, 45, 1, 2345
+                90, 78, 0, 5, 345, 45, 1, 2345
         };
         int index = 0;
         int max = 0;
@@ -269,7 +270,7 @@ public class LoginOperationTest {
     }
 
     @Test
-    void drap() {
+    void draw() {
         var sb = new StringBuilder();
         for (int i = 0; i < 4; i++) {
             sb.append("*");
@@ -278,7 +279,7 @@ public class LoginOperationTest {
     }
 
     @Test
-    void drap1() {
+    void draw1() {
         int data[] = new int[]{
                 0, 0, 0, 0, 1, 0, 0, 0, 0,
                 0, 0, 0, 1, 0, 1, 0, 0, 0,
@@ -308,7 +309,7 @@ public class LoginOperationTest {
         //定义一个需要分析的表达式
         String expression = "2022/07/04";
         //定义一年的年份
-        int months[] = new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        int months[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         //将表达式通过/分割
         String[] exp = expression.split("/");
         //获取年月日
@@ -340,6 +341,7 @@ public class LoginOperationTest {
 
     /**
      * 获取公因数
+     *
      * @param x int
      * @param y int
      * @return 公因数
@@ -355,6 +357,7 @@ public class LoginOperationTest {
 
     /**
      * 公倍数
+     *
      * @param x int
      * @param y int
      * @return 公倍数
@@ -365,6 +368,62 @@ public class LoginOperationTest {
             temp++;
         }
         return temp;
+    }
+
+    @Test
+    void printArray() {
+        //定义数组：通过数组元素类型[] 数组名;
+        //
+        long longArr[] = new long[]{
+                30491675, 28347490, 47575954, 383646658, 4947565
+        };
+        long resoveArr[] = new long[longArr.length];
+        int j = 0;
+        for (int i = longArr.length - 1; i >= 0; i--) {
+            resoveArr[j] = longArr[i];
+            j++;
+        }
+//        for (long l : resoveArr) {
+//            System.out.printf("数组反转后是%d\n", l);
+//        }
+        print(resoveArr);
+    }
+
+    void print(long[] arr) {
+        for (var item : arr) {
+            System.out.printf("%d\t", item);
+        }
+    }
+
+    @Test
+    void printArrayList() {
+        StringBuilder sb = new StringBuilder("[");
+        int nums[] = {1, 234, 124323, 5, 5, 2, 234};
+        for (int i = 0; i < nums.length; i++) {
+            sb.append(nums[i]);
+            if (i != nums.length - 1) {
+                sb.append(",");
+            }
+        }
+        sb.append("]");
+        System.out.println(sb);
+    }
+
+    @Test
+    void arrayTwo() {
+        int nums[][] = new int[11][11];
+        nums[0][0] = 5;
+        nums[0][1] = 4;
+        printArray(nums);
+    }
+
+    void printArray(int[][] nums) {
+        for (int[] num : nums) {
+            for (int i : num) {
+                System.out.printf("%-2d\t", i);
+            }
+            System.out.println();
+        }
     }
 
     void print() {

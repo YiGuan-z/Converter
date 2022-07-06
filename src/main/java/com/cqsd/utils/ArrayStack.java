@@ -1,6 +1,8 @@
 package com.cqsd.utils;
 
-public class ArrayStack<V> {
+import java.util.Stack;
+
+public class ArrayStack<V> extends Stack<V> {
     /*------------------------Fields------------------------*/
     int size;
     int maxSize;
@@ -20,16 +22,17 @@ public class ArrayStack<V> {
         return size == 0;
     }
 
-    public void push(V value) {
+    public V push(V value) {
         if (isFull()) {
             System.out.println("stack is full");
-            return;
+            return value;
         }
 //        stact[++top]=value;
         Node<V> temp = top;
         top = new Node<>(value);
         top.next = temp;
         size++;
+        return value;
     }
 
     public V pop() {

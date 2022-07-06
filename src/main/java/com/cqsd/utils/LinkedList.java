@@ -275,4 +275,8 @@ public class LinkedList<K, V>
         e.value = value;
         return oldValue;
     }
+
+    public Collection<V> getValues() {
+        return values;
+    }
 }

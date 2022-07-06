@@ -1,22 +1,58 @@
 package com.cqsd.utils;
 
 import java.lang.reflect.Field;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 
-public class JsonObject
+public final class JsonObject
         extends AbstractMap<String, Object>
         implements Map<String, Object> {
     private final Map<String, Object> map;
+
     public JsonObject(Map<String, Object> map) {
         this.map = map;
     }
 
     public JsonObject() {
         this(new HashMap<>());
+    }
+
+    public <T> void toJSONString(String key, T obj) {
+        //这个map的getValue里面是等号
+//        Map<String, Object> objectList = new HashMap<>();
+        StringBuilder sb = new StringBuilder("{");
+        //获取class对象
+        try {
+            Class<?> clazz = obj.getClass();
+            //获取所有属性
+            Field[] fields = clazz.getDeclaredFields();
+            //对属性进行迭代操作，如果匹配到注解就获取注解的值和被注解字段的值
+            int i = 0;
+            for (Field field : fields) {
+                field.setAccessible(true);
+                JsonEntry entry = field.getAnnotation(JsonEntry.class);
+                String propName = entry.value();
+                Object propValue = field.get(obj);
+                //System.out.printf("propName:%-2s\t propsValue:%-2s\t\n", propName, propValue);
+//                objectList.put("\"" + propName + "\"", "\"" + propValue + "\"");
+                sb
+                        .append("\"")
+                        .append(propName)
+                        .append("\"")
+                        .append(":")
+                        .append("\"")
+                        .append(propValue)
+                        .append("\"");
+                if (i != fields.length - 1) {
+                    sb.append(",");
+                }
+                i++;
+            }
+            sb.append("}");
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        map.put(key, sb);
     }
 
     public Object get(String key) {
@@ -81,13 +117,19 @@ public class JsonObject
      */
     public String toString() {
         StringBuffer sb = new StringBuffer();
+        //json头
         sb.append("{");
+        //循环map里面的内容
         for (Map.Entry<String, Object> entry : map.entrySet()) {
+            //添加 "对象名":
             sb.append("\"");
             sb.append(entry.getKey());
             sb.append("\"");
             sb.append(":");
+            //如果是数组
             if (isArray(entry.getValue())) {
+                //添加[" "," "," "]
+                //这里是数组里的元素
                 sb.append("[");
                 int i = 0;
                 for (Object o : (Object[]) entry.getValue()) {
@@ -96,20 +138,26 @@ public class JsonObject
                     sb.append(o.toString());
                     sb.append("\"");
                     sb.append(",");
-
+                    // 干掉最后一个逗号
                     if (i == ((Object[]) entry.getValue()).length) {
                         sb.deleteCharAt(sb.length() - 1);
                     }
                 }
                 sb.append("]");
-            } else {
-                sb.append("\"");
+            } else if (entry.getValue() instanceof StringBuilder) {
                 sb.append(entry.getValue());
-                sb.append("\"");
+            } else if (entry.getValue() instanceof String || entry.getValue() != null) {
+                sb
+                        .append("\"")
+                        .append(entry.getValue())
+                        .append("\"");
             }
+            //加逗号
             sb.append(",");
         }
+        //加}
         sb.append("}");
+        //干掉最后一个,
         if (sb.charAt(sb.length() - 2) == ',')
             sb.deleteCharAt(sb.length() - 2);
         return sb.toString();
@@ -119,19 +167,4 @@ public class JsonObject
         return value.getClass().isArray();
     }
 
-    //获取被注解的类
-    int argsCount(Object value) {
-        Field[] fields = value.getClass().getDeclaredFields();
-        return fields.length;
-    }
-
-    //通过注解里的字段获取属性
-    String getFieldName(String fileName,Object obj) {
-        try {
-            Field field = obj.getClass().getField(fileName);
-            return (String) field.get(obj);
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
