@@ -54,6 +54,20 @@ public class VariableTest {
     }
 
     @Test
+    void printArr() {
+        int arr[] = {3,0,3,4,5,6};
+        System.out.print("[");
+        for (int i=0;i< arr.length;i++) {
+            if (i!=arr.length-1){
+                System.out.print(arr[i] + ",");
+            }else {
+                System.out.print(arr[i]);
+            }
+        }
+        System.out.print("]");
+    }
+
+    @Test
     void getAverage() {
         int num[] = new int[]{124, 324, 53, 6457, 58, 9};
         System.out.printf("平均数是%-2f", average(num));

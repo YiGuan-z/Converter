@@ -25,7 +25,6 @@ public final class JsonObject
         map.put(key, value);
         return value;
     }
-
     public void forEach(BiConsumer<? super String, ? super Object> consumer) {
         map.forEach(consumer);
     }

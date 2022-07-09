@@ -1,37 +1,37 @@
 package com.cdkdl;
 
-import java.util.Scanner;
-import static java.lang.System.*;
+import static java.lang.System.out;
+
 public class Variable {
-    public static void main(String[] args) {
-        /**
-         * [0,5)无等级
-         * [5,12)*
-         * [12,21)**
-         * [21,32)***
-         * [32,~) 🌛
-         */
-        var sc = new Scanner(in);
-        System.out.println("请输入等级：");
-        int level = sc.nextInt();
-        if (level>=0&&level<5){
-            out.println("???");
-        } else if (level >= 5 && level < 12) {
-            out.println("🌟");
-        } else if (level >= 12 && level < 21) {
-            out.println("🌟🌟");
-        } else if (level >= 21 && level < 32) {
-            out.println("🌟🌟🌟");
-        }else {
-            out.println("🌛");
+    int[][] sanjiao = new int[5][5];
+
+    void create() {
+        for (int line = 0; line < sanjiao.length; line++) {
+            for (int row = 0; row <= line; row++) {
+                if (row == 0 || row == line) {
+                    sanjiao[line][row] = 1;
+                } else {
+                    sanjiao[line][row] = sanjiao[line - 1][row - 1] + sanjiao[line - 1][row];
+                }
+                out.printf("%-3d", sanjiao[line][row]);
+            }
+            out.println();
         }
     }
 
+    void draw() {
+        for (int i = 0; i < sanjiao.length; i++) {
+            //从4递减
+            for (int j = 0; j < sanjiao.length - 1 - i; j++) {
+                out.print(" ");
+            }
+            //输出一个数字加一个空格
+            for (int j = 0; j <= i; j++) {
+                out.print(sanjiao[i][j] + " ");
+            }
+            //换行
+            out.println();
+        }
 
-//    static void swap(int num1, int num2) {
-//        int temp=num1;
-//        num1=num2;
-//        num2=temp;
-//    }
-
+    }
 }

@@ -1,8 +1,14 @@
 package com.cdkdl;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 public class LoginOperationTest {
     @Test
@@ -281,6 +287,8 @@ public class LoginOperationTest {
     @Test
     void draw1() {
         int data[] = new int[]{
+                //9x9的画布上
+                //顶点为1：5 4：2 4：8
                 0, 0, 0, 0, 1, 0, 0, 0, 0,
                 0, 0, 0, 1, 0, 1, 0, 0, 0,
                 0, 0, 1, 0, 0, 0, 1, 0, 0,
@@ -307,7 +315,7 @@ public class LoginOperationTest {
     void testYear() {
         int result = 0;
         //定义一个需要分析的表达式
-        String expression = "2022/07/04";
+        String expression = "2022/01/08";
         //定义一年的年份
         int months[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         //将表达式通过/分割
@@ -316,9 +324,9 @@ public class LoginOperationTest {
         int year = Integer.parseInt(exp[0]);
         int month = Integer.parseInt(exp[1]);
         int day = Integer.parseInt(exp[2]);
-        System.out.printf("year:%d month:%d day:%d\n", year, month, day);
+        System.out.printf("year:%-2d month:%-2d day:%-2d\n", year, month, day);
         //判断闰年
-        if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+        if (year % 4 == 0 && year % 100 != 0 /*|| year % 400 == 0*/) {
             months[1] = 29;
         }
         //将数组里的天数相加
@@ -328,7 +336,6 @@ public class LoginOperationTest {
         //最后加上天数
         result += day;
         System.out.printf("%d", result);
-
     }
 
     @Test
@@ -425,18 +432,184 @@ public class LoginOperationTest {
             System.out.println();
         }
     }
+
     @Test
-    void testPrice(){
+    void testPrice() {
         double totalPrice = getTotalPrice(0.7, 54.2, 321.4, 3245.2);
-        System.out.printf("%-2.4f",totalPrice);
+        System.out.printf("%-2.4f", totalPrice);
     }
 
-    double getTotalPrice(double cutoff,double... prices){
-        double total=0;
+    double getTotalPrice(double cutoff, double... prices) {
+        double total = 0;
         for (double price : prices) {
-            total+=price;
+            total += price;
         }
-        return total*cutoff;
+        return total * cutoff;
+    }
+
+    @Test
+    void getFac() {
+        long factorial = getFactorial(5);
+        System.out.println(factorial);
+    }
+
+    long getFactorial(int n) {
+        if (n <= 1) {
+            return 1;
+        } else {
+            return getFactorial(n - 1) * n;
+        }
+    }
+
+    @Test
+    void tetAvg() {
+        int nums[][] = {{1, 2, 3}, {4, 5}};
+        System.out.println(getAvg(nums));
+    }
+
+    int getAvg(int[][] arr) {
+        int count = 0;
+        int length = 0;
+        for (var item : arr) {
+            for (var num : item) {
+                length++;
+                count += num;
+            }
+        }
+        return count / length;
+    }
+
+    @Test
+    void testPrinf() {
+        int nums[] = {23423, 4655647, 8, 0, 0, 345, 0, 0, 0};
+        StringBuilder str = new StringBuilder("[");
+        for (int i = 0; i < nums.length; i++) {
+            if (i != nums.length - 1 && nums[i] != 0) {
+                str.append(nums[i]);
+                str.append(",");
+            } else if (nums[i] != 0) {
+                str.append(nums[i]);
+            }
+        }
+        if (str.charAt(str.length() - 1) == ',') {
+            str.deleteCharAt(str.length() - 1);
+        }
+        str.append("]");
+        System.out.println(str);
+    }
+
+    @Test
+    void testPalindromes() {
+        int num = 21312;
+//        Scanner scanner = new Scanner(System.in);
+//        int num= scanner.nextInt();
+        int gewei = num % 10;
+        int shiwei = num % 100 / 10;
+        int baiwei = num % 1000 / 100;
+        int qianwei = num % 10000 / 1000;
+        int waiwei = num % 100000 / 10000;
+        if (gewei == waiwei && shiwei == qianwei) {
+            System.out.println("回文数");
+        } else {
+            System.out.println("不是回文数");
+        }
+        int[] number = getNumber(String.valueOf(num));
+    }
+
+    int[] getNumber(String num) {
+        int result[] = new int[num.length()];
+        for (int i = 0; i < num.length(); i++) {
+            result[i] = Integer.parseInt(String.valueOf(num.charAt(i)));
+        }
+        System.out.println(Arrays.toString(result));
+        return result;
+    }
+
+    @Test
+    void testDelect() {
+        int nums[] = new int[]{11, 22, 22, 22, 22, 22, 33, 44, 22, 55, 22};
+//        int[] ints = delectByIndex(nums, 1);
+//        System.out.println(Arrays.toString(ints));
+        int[] ints = delectByNumber(nums, 22);
+        System.out.println(Arrays.toString(ints));
+    }
+
+    int[] delectByIndex(int[] arr, int index) {
+        for (int i = index; i < arr.length - 1; i++) {
+            if (i > index) {
+                arr[i] = arr[i + 1];
+            }
+        }
+        arr[arr.length - 1] = -1;
+        return arr;
+    }
+
+    int[] delectByNumber(int[] arr, int target) {
+        int count = 0;
+        //循环arr
+        //把需要删除的元素从后面移到前面
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == target) {
+                arr[i] = arr[i + 1];
+                if (arr[i + 1] == -1) {
+                    break;
+                }
+                for (int j = i; j < arr.length; j++) {
+                    if (j == arr.length - 1/*|| arr[j+1]==-1*/) {
+                        arr[j] = -1;
+                    } else {
+                        arr[j] = arr[j + 1];
+                    }
+                    count++;
+                }
+//                System.out.println(i);
+                i--;
+                System.out.println(Arrays.toString(arr));
+                System.out.printf("循环了%2d次", count);
+            }
+
+        }
+//        int index = indexOf(arr, target);
+//        if (index == -1) return null;
+//        for (int i = index; i < arr.length; i++) {
+//            if (i == arr.length - 1 || arr[i + 1] == -1) {
+//                arr[i] = -1;
+//                break;
+//            }
+//            arr[i] = arr[i + 1];
+//        }
+
+        return arr;
+    }
+
+
+    int indexOf(int arr[], int target) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == target) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    @Test
+    void testPrimeNumber() {
+        Assertions.assertTrue(isPrimenumber(5));
+    }
+
+    boolean isPrimenumber(int number) {
+        if (number < 1) return false;
+        for (int i = 2; i < number - 1; i++) {
+            if (number % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Test
+    void printPractice() {
+
     }
 
     void print() {

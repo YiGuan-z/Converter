@@ -12,6 +12,7 @@ public class JsonTest {
 
     @BeforeEach
     void atrer() {
+        Thread thread = new Thread(this::JsonTestPrint);
         //找到这些注解，然后把它们转换成json
         Student[] students = new Student[]{
                 new Student("张三", 18),
@@ -22,9 +23,10 @@ public class JsonTest {
         json.put("name", "cqsd");
         json.put("age", 18);
         json.put("hobbies", jsonObj);
+        json.put("爷爷", "大爷");
         json.toJSONString("student", new Student("王武", 23));
         json.toJSONString("students", students);
-
+        thread.start();
 
     }
 
