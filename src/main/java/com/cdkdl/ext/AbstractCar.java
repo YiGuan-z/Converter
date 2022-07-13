@@ -8,7 +8,6 @@ package com.cdkdl.ext;
  **/
 abstract public class AbstractCar {
 	private String name;
-	private Integer rent;
 
 	public String getName() {
 		return name;
@@ -19,12 +18,5 @@ abstract public class AbstractCar {
 		return this;
 	}
 
-	public Integer getRent() {
-		return rent;
-	}
-
-	public AbstractCar setRent(Integer rent) {
-		this.rent = rent;
-		return this;
-	}
+	abstract public Integer getRent();
 }
