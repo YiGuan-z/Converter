@@ -15,30 +15,26 @@ public class CarMain {
 		System.out.println("按1轿车，按2客车");
 		switch (scanner.nextInt()) {
 			case 1: {
-				int result = 0;
+				int result;
 				System.out.println("请输入车型");
 				String name = scanner.next();
 				System.out.println("需要租多少天？");
-				int i = scanner.nextInt();
+				int days = scanner.nextInt();
 				Car car = new Car(name);
 				Integer rent = car.getRent();
-				for (int j = 0; j < i; j++) {
-					result += rent;
-				}
-				System.out.printf("租%d天的%s需要%dRMB", i, car.getName(), result);
+				result=rent*days;
+				System.out.printf("租%d天的%s需要%dRMB", days, car.getName(), result);
 				break;
 			}
 			case 2: {
-				int result = 0;
+				int result;
 				System.out.println("请输入多少座");
-				int anInt = scanner.nextInt();
+				int seat = scanner.nextInt();
 				System.out.println("需要租多少天？");
-				int i = scanner.nextInt();
-				PassengerCar passengerCar = new PassengerCar(anInt);
-				for (int j = 0; j < i; j++) {
-					result += passengerCar.getRent();
-				}
-				System.out.printf("租%d天的%d座需要%dRMB", i, anInt, result);
+				int days = scanner.nextInt();
+				PassengerCar passengerCar = new PassengerCar(seat);
+				result = passengerCar.getRent() * days;
+				System.out.printf("租%d天的%d座需要%dRMB", days, seat, result);
 
 			}
 		}
