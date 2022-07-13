@@ -1,5 +1,6 @@
 package com.cdkdl;
 
+import static java.lang.System.in;
 import static java.lang.System.out;
 
 public class Variable {
@@ -33,5 +34,21 @@ public class Variable {
             out.println();
         }
 
+    }
+
+    void test(int[] arr) {
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = i; j < arr.length; j++) {
+                if (count == 2) {
+                    return;
+                } else {
+                    if (arr[i] + arr[j] == 14) {
+                        out.println(arr[i] + "+" + arr[j] + "=" +( arr[i] + arr[j]));
+                        count++;
+                    }
+                }
+            }
+        }
     }
 }

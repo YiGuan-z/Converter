@@ -161,7 +161,6 @@ public class LoginOperationTest {
         }
         System.out.printf("1...500能被7整除数的结果为%d", result);
     }
-    //TODO day3作业
 
     /**
      * 从100每次递减5输出直至5
